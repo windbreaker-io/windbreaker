@@ -1,5 +1,5 @@
 {
-  "name": "wind-breaker",
+  "name": "windbreaker",
   "version": "0.0.1",
   "description": "Automated dependency management",
   "main": "index.js",

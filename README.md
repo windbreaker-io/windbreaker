@@ -1,6 +1,6 @@
 # wind-breaker
 
-[![Build Status](https://travis-ci.org/wind-breaker/wind-breaker.svg?branch=master)](https://travis-ci.org/wind-breaker/wind-breaker)
-[![Coverage Status](https://coveralls.io/repos/github/wind-breaker/wind-breaker/badge.svg?branch=master)](https://coveralls.io/github/wind-breaker/wind-breaker?branch=master)
+[![Build Status](https://travis-ci.org/windbreaker-io/windbreaker.svg?branch=master)](https://travis-ci.org/windbreaker-io/windbreaker)
+[![Coverage Status](https://coveralls.io/repos/github/windbreaker-io/windbreaker/badge.svg?branch=master)](https://coveralls.io/github/windbreaker-io/windbreaker?branch=master)
 
 λ
