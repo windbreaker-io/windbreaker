@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wind-breaker/wind-breaker.git"
+    "url": "git+https://github.com/windbreaker-io/windbreaker.git"
   },
   "keywords": [
     "dependency",
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wind-breaker/wind-breaker/issues"
+    "url": "https://github.com/windbreaker-io/windbreaker/issues"
   },
-  "homepage": "https://github.com/wind-breaker/wind-breaker#readme",
+  "homepage": "https://github.com/windbreaker-io/windbreaker#readme",
   "devDependencies": {
     "eslint": "^4.0.0",
     "eslint-config-standard": "^10.2.1",
