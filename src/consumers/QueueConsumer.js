@@ -73,7 +73,7 @@ module.exports = class QueueConsumer extends EventEmitter {
   async stop () {
     if (this._channel) {
       try {
-        logger.info('Closing channel')
+        await this._channel.cancel(this._consumerTag)
         await this._channel.close()
       } catch (err) {
         logger.info('Error closing channel', err)

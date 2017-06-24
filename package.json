@@ -6,9 +6,14 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "nyc ava",
+
+    "test": "nyc ava test/unit test/integration",
+    "test:unit": "nyc ava test/unit",
+    "test:integration": "nyc ava test/integration",
+
     "docker:start": "docker-compose up",
     "docker:stop": "docker-compose down",
+
     "start": "browser-refresh src/server.js",
     "start-cluster": "browser-refresh src/cluster.js"
   },

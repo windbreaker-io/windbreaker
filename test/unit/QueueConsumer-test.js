@@ -1,5 +1,5 @@
 /**
- * QueueConsumer test
+ * QueueConsumer unit test
  */
 require('require-self-ref')
 
@@ -34,6 +34,10 @@ class MockChannel extends EventEmitter {
   }
 
   nack (message) {
+    return Promise.resolve()
+  }
+
+  cancel (tag) {
     return Promise.resolve()
   }
 
@@ -148,7 +152,7 @@ test('should emit a message if a message is consumed', async (t) => {
   channel.emit('test-message', testMessage)
   let receivedMessage = await messagePromise
 
-  t.is(receivedMessage, testMessage)
+  t.deepEqual(receivedMessage, testMessage)
 })
 
 test('should fail to consume if a channel cannot be made', async (t) => {
@@ -264,6 +268,20 @@ test('should close the channel upon calling "stop"', async (t) => {
   const mock = sinon.mock(channel)
 
   mock.expects('close').once()
+
+  await consumer.start()
+  await consumer.stop()
+
+  mock.verify()
+  t.pass()
+})
+
+test('should cancel the consumer when calling "stop"', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+
+  mock.expects('cancel').once()
+    .withArgs(consumer._consumerTag)
 
   await consumer.start()
   await consumer.stop()
