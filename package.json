@@ -16,7 +16,7 @@
     "test:integration": "npm run docker:start && sleep 10 && nyc ava test/integration; npm run docker:stop",
 
     "start": "browser-refresh src/server.js",
-    "start-cluster": "browser-refresh src/cluster.js"
+    "cluster:start": "browser-refresh src/cluster.js"
   },
   "repository": {
     "type": "git",
