@@ -70,7 +70,21 @@ test.beforeEach('setup mock channel and connections', (t) => {
     queueName: testQueueName,
     connection
   })
-  t.context = { channel, connection, consumer }
+
+  const sandbox = sinon.sandbox.create()
+
+  t.context = {
+    channel,
+    connection,
+    consumer,
+    sandbox
+  }
+})
+
+test.afterEach('clean up', (t) => {
+  const { sandbox } = t.context
+
+  sandbox.restore()
 })
 
 test('should generate a _consumerTag based off of the queue name', (t) => {
@@ -85,8 +99,13 @@ test('should generate a _consumerTag based off of the queue name', (t) => {
  * Starting the queue consumer
  */
 test('should should create a channel using the given connection', async (t) => {
-  const { channel, connection, consumer } = t.context
-  const mock = sinon.mock(connection)
+  const {
+    channel,
+    connection,
+    consumer,
+    sandbox
+  } = t.context
+  const mock = sandbox.mock(connection)
 
   mock.expects('createChannel').once()
     .returns(channel)
@@ -98,8 +117,8 @@ test('should should create a channel using the given connection', async (t) => {
 })
 
 test('should perform an assertion on the queue', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
 
   mock.expects('assertQueue').once()
     .withArgs(testQueueName)
@@ -111,8 +130,8 @@ test('should perform an assertion on the queue', async (t) => {
 })
 
 test('should set the channel prefetch', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
 
   mock.expects('prefetch').once()
     .withArgs(consumer._prefetchCount)
@@ -124,8 +143,8 @@ test('should set the channel prefetch', async (t) => {
 })
 
 test('should begin consuming from the queue', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
 
   mock.expects('consume').once()
     .withArgs(testQueueName)
@@ -156,8 +175,8 @@ test('should emit a message if a message is consumed', async (t) => {
 })
 
 test('should fail to consume if a channel cannot be made', async (t) => {
-  const { connection, consumer } = t.context
-  const mock = sinon.mock(connection)
+  const { connection, consumer, sandbox } = t.context
+  const mock = sandbox.mock(connection)
   const channelError = new Error('channel error')
 
   mock.expects('createChannel').once()
@@ -188,8 +207,8 @@ test('should throw error if attempting to reject a ' +
 })
 
 test('should use channel to acknowledge message', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
   mock.expects('ack').once()
     .withArgs(testMessage)
 
@@ -200,8 +219,8 @@ test('should use channel to acknowledge message', async (t) => {
 })
 
 test('should use channel to reject message', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
   mock.expects('nack').once()
     .withArgs(testMessage)
 
@@ -212,8 +231,8 @@ test('should use channel to reject message', async (t) => {
 })
 
 test('should fail to consume if a queue assertion fails', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
   const queueError = new Error('queue error')
 
   mock.expects('assertQueue').once()
@@ -264,8 +283,8 @@ test('should emit an error event if the connection emits an error', async (t) =>
 })
 
 test('should close the channel upon calling "stop"', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
 
   mock.expects('close').once()
 
@@ -277,8 +296,8 @@ test('should close the channel upon calling "stop"', async (t) => {
 })
 
 test('should cancel the consumer when calling "stop"', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
 
   mock.expects('cancel').once()
     .withArgs(consumer._consumerTag)
@@ -291,8 +310,8 @@ test('should cancel the consumer when calling "stop"', async (t) => {
 })
 
 test('should not call "close" if channel does not exist', async (t) => {
-  const { channel, consumer } = t.context
-  const mock = sinon.mock(channel)
+  const { channel, consumer, sandbox } = t.context
+  const mock = sandbox.mock(channel)
   mock.expects('close').never()
 
   await consumer.stop()
