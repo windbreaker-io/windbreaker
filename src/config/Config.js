@@ -16,8 +16,25 @@ module.exports = require('fashion-model').extend({
     },
 
     eventsQueueName: {
-      description: 'The name of the queue events are published on',
+      description: 'The name of the queue in which events are published on',
       default: 'events'
+    },
+
+    workQueueName: {
+      description: 'The name of the queue in which work is placed',
+      default: 'work'
+    },
+
+    eventsQueuePrefetchCount: {
+      description: 'The max number of unacknowledged events to pull ' +
+        'for the events queue',
+      default: 10
+    },
+
+    workQueuePrefetchCount: {
+      description: 'The max number of unacknowledged events to pull ' +
+        'for the work queue',
+      default: 10
     }
   }
 })

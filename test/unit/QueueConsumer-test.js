@@ -6,11 +6,15 @@ require('require-self-ref')
 const test = require('ava')
 const sinon = require('sinon')
 
-const QueueConsumer = require('~/src/consumer/QueueConsumer')
+const QueueConsumer = require('~/src/consumers/QueueConsumer')
 const { EventEmitter } = require('events')
 
 class MockChannel extends EventEmitter {
   assertQueue (queueName, options) {
+    return Promise.resolve()
+  }
+
+  prefetch (prefetchValue) {
     return Promise.resolve()
   }
 
@@ -34,9 +38,18 @@ class MockConnection extends EventEmitter {
 
 const testQueueName = 'some-queue'
 
+test.beforeEach('setup mock channel and connections', (t) => {
+  const channel = new MockChannel(testQueueName)
+  const connection = new MockConnection(channel)
+  const consumer = new QueueConsumer({
+    queueName: testQueueName,
+    connection
+  })
+  t.context = { channel, connection, consumer }
+})
+
 test('should generate a _consumerTag based off of the queue name', (t) => {
-  const channel = new MockChannel()
-  const consumer = new QueueConsumer(testQueueName, new MockConnection(channel))
+  const { consumer } = t.context
   const consumerTag = consumer._consumerTag
 
   t.true(consumerTag !== null)
@@ -47,11 +60,8 @@ test('should generate a _consumerTag based off of the queue name', (t) => {
  * Starting the queue consumer
  */
 test('should should create a channel using the given connection', async (t) => {
-  const testQueueName = 'some-queue'
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
+  const { channel, connection, consumer } = t.context
   const mock = sinon.mock(connection)
-  const consumer = new QueueConsumer(testQueueName, connection)
 
   mock.expects('createChannel').once()
     .returns(channel)
@@ -63,14 +73,24 @@ test('should should create a channel using the given connection', async (t) => {
 })
 
 test('should perform an assertion on the queue', async (t) => {
-  const channel = new MockChannel()
+  const { channel, consumer } = t.context
   const mock = sinon.mock(channel)
 
   mock.expects('assertQueue').once()
-    .withArgs(testQueueName, { durable: true })
+    .withArgs(testQueueName)
 
-  const connection = new MockConnection(channel)
-  const consumer = new QueueConsumer(testQueueName, connection)
+  await consumer.start()
+
+  mock.verify()
+  t.pass()
+})
+
+test('should set the channel prefetch', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+
+  mock.expects('prefetch').once()
+    .withArgs(consumer._prefetchCount)
 
   await consumer.start()
 
@@ -79,10 +99,8 @@ test('should perform an assertion on the queue', async (t) => {
 })
 
 test('should begin consuming from the queue', async (t) => {
-  const channel = new MockChannel()
+  const { channel, consumer } = t.context
   const mock = sinon.mock(channel)
-  const connection = new MockConnection(channel)
-  const consumer = new QueueConsumer(testQueueName, connection)
 
   mock.expects('consume').once()
     .withArgs(testQueueName)
@@ -94,9 +112,7 @@ test('should begin consuming from the queue', async (t) => {
 })
 
 test('should emit a message if a message is consumed', async (t) => {
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
-  const consumer = new QueueConsumer(testQueueName, connection)
+  const { channel, consumer } = t.context
 
   const messagePromise = new Promise((resolve) => {
     consumer.once('message', (message) => {
@@ -115,12 +131,9 @@ test('should emit a message if a message is consumed', async (t) => {
 })
 
 test('should fail to consume if a channel cannot be made', async (t) => {
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
+  const { connection, consumer } = t.context
   const mock = sinon.mock(connection)
   const channelError = new Error('channel error')
-
-  const consumer = new QueueConsumer(testQueueName, connection)
 
   mock.expects('createChannel').once()
     .throws(channelError)
@@ -134,12 +147,9 @@ test('should fail to consume if a channel cannot be made', async (t) => {
 })
 
 test('should fail to consume if a queue assertion fails', async (t) => {
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
+  const { channel, consumer } = t.context
   const mock = sinon.mock(channel)
   const queueError = new Error('queue error')
-
-  const consumer = new QueueConsumer(testQueueName, connection)
 
   mock.expects('assertQueue').once()
     .throws(queueError)
@@ -153,9 +163,7 @@ test('should fail to consume if a queue assertion fails', async (t) => {
 })
 
 test('should emit an error event if the channel emits an error', async (t) => {
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
-  const consumer = new QueueConsumer(testQueueName, connection)
+  const { channel, consumer } = t.context
   const testError = new Error('test')
 
   const errorPromise = new Promise((resolve) => {
@@ -173,9 +181,7 @@ test('should emit an error event if the channel emits an error', async (t) => {
 })
 
 test('should emit an error event if the connection emits an error', async (t) => {
-  const channel = new MockChannel()
-  const connection = new MockConnection(channel)
-  const consumer = new QueueConsumer(testQueueName, connection)
+  const { channel, consumer } = t.context
   const testError = new Error('test')
 
   const errorPromise = new Promise((resolve) => {

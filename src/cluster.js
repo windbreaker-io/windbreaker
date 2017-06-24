@@ -11,5 +11,6 @@ const numOfCpus = os.cpus().length
 
 clusterMaster({
   exec: require.resolve('~/src/server.js'),
-  size: numOfCpus
+  size: numOfCpus,
+  args: process.argv.slice(2)
 })
