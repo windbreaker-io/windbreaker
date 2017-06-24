@@ -5,6 +5,6 @@ services:
     ports:
       - '5432:5432'
   rabbitmq:
-    image: 'rafakato/rabbitmq-delayed-message-exchange'
+    image: 'rabbitmq:3.6.10-alpine'
     ports:
       - '5672:5672'
