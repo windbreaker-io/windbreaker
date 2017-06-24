@@ -7,6 +7,7 @@ const test = require('ava')
 const uuid = require('uuid')
 const amqplib = require('amqplib')
 
+const Promise = require('bluebird')
 const QueueConsumer = require('~/src/consumers/QueueConsumer')
 
 const waitForEvent = require('~/test/util/waitForEvent')
@@ -111,7 +112,6 @@ test('should close the channel when when stopping the consumer', async (t) => {
 test('should enforce the prefetch limit on the consumer\'s channel', async (t) => {
   t.plan(1)
   const { channel, consumer, queueName } = t.context
-  const timeoutError = new Error('timeout')
 
   // send enough message to hit the upper limit
   for (let i = 0; i < TEST_PREFETCH_LIMIT; i++) {
@@ -127,19 +127,13 @@ test('should enforce the prefetch limit on the consumer\'s channel', async (t) =
   const lastMessage = JSON.stringify({ lastMessage: true })
 
   try {
-    await Promise.race([
-      Promise.all([
-        waitForEvent(consumer, 'message', (message) => {
-          return message.content.toString() === lastMessage
-        }),
-        channel.sendToQueue(queueName, Buffer.from(lastMessage))
-      ]),
-
-      new Promise((resolve, reject) => {
-        setTimeout(() => reject(timeoutError), 2000)
-      })
-    ])
+    await Promise.all([
+      waitForEvent(consumer, 'message', (message) => {
+        return message.content.toString() === lastMessage
+      }),
+      channel.sendToQueue(queueName, Buffer.from(lastMessage))
+    ]).timeout(2000)
   } catch (err) {
-    t.is(err, timeoutError)
+    t.truthy(err instanceof Promise.TimeoutError)
   }
 })
