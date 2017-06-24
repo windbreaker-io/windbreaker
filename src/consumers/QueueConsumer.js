@@ -13,6 +13,7 @@ module.exports = class QueueConsumer extends EventEmitter {
     this._channel = null
     this._prefetchCount = prefetchCount || 10
 
+    // generate tag to help identify consumers connected to ActiveMQ
     this._consumerTag = `${queueName}-consumer-${uuid.v4()}`
   }
 
@@ -66,12 +67,19 @@ module.exports = class QueueConsumer extends EventEmitter {
       if (message) {
         this.emit('message', message)
       }
-    })
+    }, { consumerTag })
   }
 
   async stop () {
-    if (this._connection) {
-
+    if (this._channel) {
+      try {
+        logger.info('Closing channel')
+        await this._channel.close()
+      } catch (err) {
+        logger.info('Error closing channel', err)
+      } finally {
+        this._channel = null
+      }
     }
   }
 }

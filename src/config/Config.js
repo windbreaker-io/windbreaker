@@ -35,6 +35,11 @@ module.exports = require('fashion-model').extend({
       description: 'The max number of unacknowledged events to pull ' +
         'for the work queue',
       default: 10
+    },
+
+    consumerReconnectTimeout: {
+      description: 'The amount of time to wait before attempting a reconnect (in ms)',
+      default: 10000
     }
   }
 })

@@ -10,6 +10,11 @@ const QueueConsumer = require('~/src/consumers/QueueConsumer')
 const { EventEmitter } = require('events')
 
 class MockChannel extends EventEmitter {
+  constructor () {
+    super()
+    this._closed = false
+  }
+
   assertQueue (queueName, options) {
     return Promise.resolve()
   }
@@ -22,6 +27,21 @@ class MockChannel extends EventEmitter {
     this.on('test-message', (testMessage) => {
       onMessage(testMessage)
     })
+  }
+
+  ack (message) {
+    return Promise.resolve()
+  }
+
+  nack (message) {
+    return Promise.resolve()
+  }
+
+  close () {
+    if (this._closed) {
+      throw new Error('Already closed')
+    }
+    this._closed = true
   }
 }
 
@@ -37,6 +57,7 @@ class MockConnection extends EventEmitter {
 }
 
 const testQueueName = 'some-queue'
+const testMessage = { foo: 'bar' }
 
 test.beforeEach('setup mock channel and connections', (t) => {
   const channel = new MockChannel(testQueueName)
@@ -146,6 +167,46 @@ test('should fail to consume if a channel cannot be made', async (t) => {
   }
 })
 
+test('should throw error if attempting to acknowledge a ' +
+'message without a channel', async (t) => {
+  const { consumer } = t.context
+
+  const error = await t.throws(consumer.acknowledgeMessage(testMessage))
+  t.is(error.message, 'Channel not initialized')
+})
+
+test('should throw error if attempting to reject a ' +
+'message without a channel', async (t) => {
+  const { consumer } = t.context
+
+  const error = await t.throws(consumer.rejectMessage(testMessage))
+  t.is(error.message, 'Channel not initialized')
+})
+
+test('should use channel to acknowledge message', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+  mock.expects('ack').once()
+    .withArgs(testMessage)
+
+  await consumer.start()
+  await consumer.acknowledgeMessage(testMessage)
+  mock.verify()
+  t.pass()
+})
+
+test('should use channel to reject message', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+  mock.expects('nack').once()
+    .withArgs(testMessage)
+
+  await consumer.start()
+  await consumer.rejectMessage(testMessage)
+  mock.verify()
+  t.pass()
+})
+
 test('should fail to consume if a queue assertion fails', async (t) => {
   const { channel, consumer } = t.context
   const mock = sinon.mock(channel)
@@ -196,4 +257,40 @@ test('should emit an error event if the connection emits an error', async (t) =>
   let error = await errorPromise
 
   t.is(error, testError)
+})
+
+test('should close the channel upon calling "stop"', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+
+  mock.expects('close').once()
+
+  await consumer.start()
+  await consumer.stop()
+
+  mock.verify()
+  t.pass()
+})
+
+test('should not call "close" if channel does not exist', async (t) => {
+  const { channel, consumer } = t.context
+  const mock = sinon.mock(channel)
+  mock.expects('close').never()
+
+  await consumer.stop()
+  mock.verify()
+  t.pass()
+})
+
+test('should not throw error if channel is already closed', async (t) => {
+  const { channel, consumer } = t.context
+
+  channel._closed = true
+
+  try {
+    await consumer.stop()
+    t.pass()
+  } catch (err) {
+    t.fail(err.message)
+  }
 })

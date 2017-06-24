@@ -9,6 +9,8 @@ const EVENTS_QUEUE_PREFETCH_COUNT = config.getEventsQueuePrefetchCount()
 const WORK_QUEUE_NAME = config.getWorkQueueName()
 const WORK_QUEUE_PREFETCH_COUNT = config.getWorkQueuePrefetchCount()
 
+const CONSUMER_RECONNECT_TIMEOUT = config.getConsumerReconnectTimeout()
+
 let connectionPromise
 let amqConnection
 
@@ -98,7 +100,7 @@ function _restartConsumer (queueName, prefetchCount) {
     } catch (err) {
       logger.error('Error restarting event consumer', err)
     }
-  }, 1000)
+  }, CONSUMER_RECONNECT_TIMEOUT)
 }
 
 exports.initialize = async function () {
