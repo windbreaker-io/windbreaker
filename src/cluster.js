@@ -4,13 +4,8 @@
  */
 require('require-self-ref')
 
-const os = require('os')
-const clusterMaster = require('cluster-master')
+const clusterUtil = require('windbreaker-service-util/cluster')
 
-const numOfCpus = os.cpus().length
-
-clusterMaster({
-  exec: require.resolve('~/src/server.js'),
-  size: numOfCpus,
-  args: process.argv.slice(2)
-})
+clusterUtil.register(
+  require.resolve('~/src/server.js'),
+  process.argv.slice(2))

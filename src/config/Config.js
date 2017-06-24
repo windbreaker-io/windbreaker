@@ -1,18 +1,11 @@
 // config model
-const DefaultsMixin = require('fashion-model-defaults')
+const BaseConfig = require('windbreaker-service-util/models/BaseServiceConfig')
 
-module.exports = require('fashion-model').extend({
-  mixins: [ DefaultsMixin ],
-
+module.exports = BaseConfig.extend({
   properties: {
     amqUrl: {
       description: 'The url used to access activeMQ',
       default: 'amqp://localhost'
-    },
-
-    logLevel: {
-      description: 'The level to use for logging',
-      default: 'info'
     },
 
     eventsQueueName: {
