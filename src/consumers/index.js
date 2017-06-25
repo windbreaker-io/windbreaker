@@ -11,7 +11,8 @@ const CONSUMER_RECONNECT_TIMEOUT = config.getConsumerReconnectTimeout()
 exports.initialize = async function () {
   const amqUrl = config.getAmqUrl()
 
-  const eventsConsumer = await queue.createConsumer({
+  // Create events queue consumer
+  await queue.createConsumer({
     amqUrl,
     logger,
     reconnectTimeout: CONSUMER_RECONNECT_TIMEOUT,
@@ -25,14 +26,14 @@ exports.initialize = async function () {
     }
   })
 
+  // Create work queue consumer
   await queue.createConsumer({
     amqUrl,
     logger,
     reconnectTimeout: CONSUMER_RECONNECT_TIMEOUT,
     consumerOptions: {
       queueName: WORK_QUEUE_NAME,
-      prefetchCount: WORK_QUEUE_PREFETCH_COUNT,
-      connection: eventsConsumer.getConnection()
+      prefetchCount: WORK_QUEUE_PREFETCH_COUNT
     },
     async onMessage (message) {
       // TODO: Handle the message
