@@ -1,6 +1,6 @@
 // Heavily inspired by https://github.com/greenkeeperio/greenkeeper/blob/8be4bfc45dc991ec0c3331ac15b688728f5938a5/lib/diff-package-json.js
 
-const _ = require('windbreaker-service-util/util/objectHelpers')
+const _ = require('windbreaker-service-util/helpers/objectHelper')
 const types = [
   'dependencies',
   'devDependencies',
