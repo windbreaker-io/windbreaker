@@ -65,7 +65,6 @@
     "bluebird": "^3.5.0",
     "browser-refresh": "^1.7.2",
     "fashion-model-defaults": "^1.0.1",
-    "lodash": "^4.17.4",
     "require-self-ref": "^2.0.1",
     "uuid": "^3.1.0",
     "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
