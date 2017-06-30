@@ -1,6 +1,6 @@
 // Heavily inspired by https://github.com/greenkeeperio/greenkeeper/blob/8be4bfc45dc991ec0c3331ac15b688728f5938a5/lib/diff-package-json.js
 
-const _ = require('lodash')
+const _ = require('windbreaker-service-util/util/objectHelpers')
 const types = [
   'dependencies',
   'devDependencies',
@@ -8,7 +8,13 @@ const types = [
   'peerDependencies'
 ]
 
-module.exports = function (oldPkg, newPkg) {
+/**
+ * Calculate object representation diff of two package.json objects
+ * @param {Object} oldPkg
+ * @param {Object} newPkg
+ * @return {Object} diff with name and version transition for each changed dep
+ */
+module.exports = function diff (oldPkg, newPkg) {
   const changes = {}
   for (const type of types) {
     const oldDeps = _.get(oldPkg, type)
