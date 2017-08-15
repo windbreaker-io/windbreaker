@@ -6,7 +6,7 @@ proxyquire.noPreserveCache()
 
 const Event = require('windbreaker-service-util/models/events/Event')
 const EventType = require('windbreaker-service-util/models/events/EventType')
-const handleMessage = require('~/src/messages')
+const { handleMessage } = require('~/src/messages')
 
 test('should be able to handle Event models', async (t) => {
   const event = new Event({
@@ -34,12 +34,12 @@ test('should throw error if incoming message is not an Event model', async (t) =
 })
 
 test('should throw an error if an unsupported event type is given', async (t) => {
-  const customHandleMessage = proxyquire('~/src/messages', {
+  const proxiedHandleMessage = proxyquire('~/src/messages', {
     // return empty map of handlers
     '~/src/util/getEventHandlers': () => {
       return {}
     }
-  })
+  }).handleMessage
 
   const event = new Event({
     type: EventType.GITHUB_PUSH,
@@ -49,7 +49,7 @@ test('should throw an error if an unsupported event type is given', async (t) =>
   })
 
   try {
-    await customHandleMessage(event)
+    await proxiedHandleMessage(event)
     t.fail()
   } catch (err) {
     t.true(err.message.includes('No handler'))

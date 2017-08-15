@@ -2,7 +2,7 @@ const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
 const queueUtil = require('windbreaker-service-util/queue')
 
-const onMessage = require('~/src/messages')
+const onMessage = require('~/src/messages').handleMessage
 
 exports.initialize = async function () {
   const AMQ_URL = config.getAmqUrl()

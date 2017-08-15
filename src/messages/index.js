@@ -3,7 +3,7 @@ const _getEventHandlers = require('~/src/util/getEventHandlers')
 
 const eventHandlers = _getEventHandlers()
 
-module.exports = async function handleMessage (message) {
+exports.handleMessage = async function handleMessage (message) {
   // validate that message is instance of Event
   if (message instanceof Event) {
     const typeName = message.getType().name()

@@ -1,8 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 
-const messageModule = require.resolve('~/src/messages')
-const messagesDir = messageModule.substring(0, messageModule.length - '/index.js'.length)
+const messagesDir = path.dirname(require.resolve('~/src/messages'))
 
 const eventHandlers = {}
 let initialized = false
@@ -12,12 +11,10 @@ module.exports = function getEventHandlers () {
   if (!initialized) {
     // walk events dir to get list of event handlers
     const eventHandlerFiles = glob.sync(
-      path.resolve(messagesDir, 'events/**/*.js'))
+      path.join(messagesDir, 'events/**/*.js'))
 
     for (const handlerFile of eventHandlerFiles) {
-      const eventName = handlerFile.substring(
-        handlerFile.lastIndexOf('/') + 1,
-        handlerFile.lastIndexOf('.js'))
+      const eventName = path.basename(handlerFile, '.js')
 
       eventHandlers[eventName] = require(handlerFile)
     }
