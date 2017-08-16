@@ -1,8 +1,9 @@
-const registerConfig = require('windbreaker-service-util/config')
+const configUtil = require('windbreaker-service-util/config')
+const path = require('path')
 
 const Config = require('./Config')
 const config = module.exports = new Config()
 
-registerConfig(config, [
-  { amqUrl: `amqp://localhost:${process.env.AMQ_PORT || 5672}` }
-])
+module.exports.load = async () => {
+  await configUtil.load({ config, path: path.join(__dirname, '../../config') })
+}

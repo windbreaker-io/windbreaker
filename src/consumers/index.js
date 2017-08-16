@@ -2,18 +2,17 @@ const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
 const queueUtil = require('windbreaker-service-util/queue')
 
-const EVENTS_QUEUE_NAME = config.getEventsQueueName()
-const EVENTS_QUEUE_PREFETCH_COUNT = config.getEventsQueuePrefetchCount()
-const WORK_QUEUE_NAME = config.getWorkQueueName()
-const WORK_QUEUE_PREFETCH_COUNT = config.getWorkQueuePrefetchCount()
-const CONSUMER_RECONNECT_TIMEOUT = config.getConsumerReconnectTimeout()
-
 exports.initialize = async function () {
-  const amqUrl = config.getAmqUrl()
+  const AMQ_URL = config.getAmqUrl()
+  const EVENTS_QUEUE_NAME = config.getEventsQueueName()
+  const EVENTS_QUEUE_PREFETCH_COUNT = config.getEventsQueuePrefetchCount()
+  const WORK_QUEUE_NAME = config.getWorkQueueName()
+  const WORK_QUEUE_PREFETCH_COUNT = config.getWorkQueuePrefetchCount()
+  const CONSUMER_RECONNECT_TIMEOUT = config.getConsumerReconnectTimeout()
 
   // returns a managed consumer instance
   await queueUtil.createManagedConsumer({
-    amqUrl,
+    amqUrl: AMQ_URL,
     logger,
     restart: true,
     reconnectTimeout: CONSUMER_RECONNECT_TIMEOUT,
@@ -28,7 +27,7 @@ exports.initialize = async function () {
   })
 
   await queueUtil.createManagedConsumer({
-    amqUrl,
+    amqUrl: AMQ_URL,
     logger,
     restart: true,
     reconnectTimeout: CONSUMER_RECONNECT_TIMEOUT,
