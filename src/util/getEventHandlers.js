@@ -3,12 +3,13 @@ const glob = require('glob')
 
 const messagesDir = path.dirname(require.resolve('~/src/messages'))
 
-const eventHandlers = {}
-let initialized = false
+let eventHandlers
 
 // create a map of message types to handler functions
 module.exports = function getEventHandlers () {
-  if (!initialized) {
+  if (!eventHandlers) {
+    eventHandlers = {}
+
     // walk events dir to get list of event handlers
     const eventHandlerFiles = glob.sync(
       path.join(messagesDir, 'events/**/*.js'))
@@ -18,8 +19,6 @@ module.exports = function getEventHandlers () {
 
       eventHandlers[eventName] = require(handlerFile)
     }
-
-    initialized = true
   }
 
   return eventHandlers
