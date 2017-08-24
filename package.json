@@ -57,6 +57,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "git-hooks": "^1.1.8",
     "nyc": "^11.1.0",
+    "proxyquire": "^1.8.0",
     "sinon": "^2.4.1"
   },
   "dependencies": {
@@ -64,6 +65,7 @@
     "bluebird": "^3.5.0",
     "browser-refresh": "^1.7.2",
     "fashion-model-defaults": "^1.0.2",
+    "glob": "^7.1.2",
     "require-self-ref": "^2.0.1",
     "uuid": "^3.1.0",
     "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
