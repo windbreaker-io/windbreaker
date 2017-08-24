@@ -58,7 +58,7 @@
     "git-hooks": "^1.1.8",
     "nyc": "^11.1.0",
     "proxyquire": "^1.8.0",
-    "sinon": "^2.3.6"
+    "sinon": "^2.4.1"
   },
   "dependencies": {
     "amqplib": "^0.5.1",
