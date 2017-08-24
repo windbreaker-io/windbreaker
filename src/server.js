@@ -2,16 +2,17 @@
  * Server start point
  */
 require('require-self-ref')
-
 const config = require('~/src/config')
-config.load()
-
-const logger = require('~/src/logging').logger(module)
-const consumers = require('~/src/consumers')
+let logger
 
 // handle startup tasks here
 ;(async function () {
   try {
+    await config.load()
+
+    logger = require('~/src/logging').logger(module)
+
+    const consumers = require('~/src/consumers')
     await consumers.initialize()
 
     // notify browser refresh

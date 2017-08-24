@@ -1,0 +1,2 @@
+# Address for rabbitmq
+amqUrl: "${AMQ_URL}"

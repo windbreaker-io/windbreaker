@@ -18,8 +18,8 @@ lookup_service_port() {
     echo "$port_mapping_output" | sed 's/.*:\([0-9][0-9]*\)$/\1/'
 }
 
-export AMQ_PORT=$(lookup_service_port rabbitmq 5672)
+export AMQ_URL="amqp://localhost:$(lookup_service_port rabbitmq 5672)"
 export POSTGRES_PORT=$(lookup_service_port postgres 5432)
 
-echo "AMQ_PORT: $AMQ_PORT"
+echo "AMQ_URL: $AMQ_URL"
 echo "POSTGRES_PORT: $POSTGRES_PORT"
