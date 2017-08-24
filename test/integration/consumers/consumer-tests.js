@@ -2,7 +2,6 @@ require('require-self-ref')
 const test = require('ava')
 
 const config = require('~/src/config')
-config.load()
 
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
@@ -14,6 +13,10 @@ const Event = require('windbreaker-service-util/models/events/Event')
 const EventType = require('windbreaker-service-util/models/events/EventType')
 
 const waitForEvent = require('windbreaker-service-util/test/util/waitForEvent')
+
+test.before('setup config', async () => {
+  return config.load()
+})
 
 test.beforeEach('initialize consumers and producers', async (t) => {
   const sandbox = sinon.sandbox.create()
