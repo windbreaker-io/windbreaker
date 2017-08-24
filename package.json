@@ -67,6 +67,7 @@
     "fashion-model-defaults": "^1.0.2",
     "glob": "^7.1.2",
     "require-self-ref": "^2.0.1",
+    "task-list": "^1.0.6",
     "uuid": "^3.1.0",
     "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
   }

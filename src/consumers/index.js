@@ -4,6 +4,9 @@ const queueUtil = require('windbreaker-service-util/queue')
 
 const onMessage = require('~/src/messages').handleMessage
 
+let eventConsumer
+let workConsumer
+
 exports.initialize = async function () {
   const AMQ_URL = config.getAmqUrl()
   const EVENTS_QUEUE_NAME = config.getEventsQueueName()
@@ -12,7 +15,7 @@ exports.initialize = async function () {
   const WORK_QUEUE_PREFETCH_COUNT = config.getWorkQueuePrefetchCount()
   const CONSUMER_RECONNECT_TIMEOUT = config.getConsumerReconnectTimeout()
 
-  const eventConsumer = await queueUtil.createManagedConsumer({
+  eventConsumer = await queueUtil.createManagedConsumer({
     amqUrl: AMQ_URL,
     logger,
     restart: true,
@@ -24,7 +27,7 @@ exports.initialize = async function () {
     onMessage
   })
 
-  const workConsumer = await queueUtil.createManagedConsumer({
+  workConsumer = await queueUtil.createManagedConsumer({
     amqUrl: AMQ_URL,
     logger,
     restart: true,
@@ -48,4 +51,9 @@ exports.initialize = async function () {
   // })
 
   return { eventConsumer, workConsumer }
+}
+
+exports.close = async function () {
+  await eventConsumer.stop()
+  await workConsumer.stop()
 }
