@@ -3,17 +3,17 @@
  */
 require('require-self-ref')
 const config = require('~/src/config')
+const startupTasks = require('~/src/startup-tasks')
+
 let logger
 
 // handle startup tasks here
 ;(async function () {
   try {
     await config.load()
-
     logger = require('~/src/logging').logger(module)
 
-    const consumers = require('~/src/consumers')
-    await consumers.initialize()
+    await startupTasks.startAll()
 
     // notify browser refresh
     if (process.send) {

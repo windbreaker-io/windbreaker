@@ -45,6 +45,7 @@ test.beforeEach('initialize consumers and producers', async (t) => {
   })
 
   t.context = {
+    consumers,
     githubPushSpy,
     eventConsumer,
     workConsumer,
@@ -55,15 +56,12 @@ test.beforeEach('initialize consumers and producers', async (t) => {
 
 test.afterEach('teardown test environment', async (t) => {
   const {
-    eventConsumer,
-    workConsumer,
+    consumers,
     eventProducer,
     sandbox
   } = t.context
 
-  await eventConsumer.stop()
-  await workConsumer.stop()
-
+  await consumers.close()
   await eventProducer.stop()
 
   sandbox.restore()
@@ -95,4 +93,23 @@ test('should be able to pass messages to the correct message handlers', async (t
   sandbox.assert.calledOnce(githubPushSpy)
 
   t.pass()
+})
+
+test('should call for each consumer to stop upon closing', async (t) => {
+  t.plan(0)
+
+  const {
+    eventConsumer,
+    workConsumer,
+    consumers,
+    sandbox
+  } = t.context
+
+  const eventConsumerStopSpy = sandbox.spy(eventConsumer, 'stop')
+  const workConsumerStopSpy = sandbox.spy(workConsumer, 'stop')
+
+  await consumers.close()
+
+  sandbox.assert.calledOnce(eventConsumerStopSpy)
+  sandbox.assert.calledOnce(workConsumerStopSpy)
 })
