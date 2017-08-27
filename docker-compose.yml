@@ -1,5 +1,14 @@
 version: '3'
 services:
+  test:
+    build: .
+    command: 'npm run test:docker:ci'
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/windbreaker
+      - /usr/windbreaker/node_modules
   postgres:
     image: 'postgres:9.6.3-alpine'
     ports:

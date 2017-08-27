@@ -15,7 +15,7 @@ const EventType = require('windbreaker-service-util/models/events/EventType')
 const waitForEvent = require('windbreaker-service-util/test/util/waitForEvent')
 
 test.before('setup config', async () => {
-  return config.load()
+  return config.load({})
 })
 
 test.beforeEach('initialize consumers and producers', async (t) => {
