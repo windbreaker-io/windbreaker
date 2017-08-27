@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'Start event consumers',
+  name: 'start-consumers',
 
   async start () {
     return require('~/src/consumers').initialize()
