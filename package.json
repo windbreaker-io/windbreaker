@@ -12,7 +12,7 @@
     "posttest": "npm run docker:stop",
     "test:unit": "nyc ava test/unit",
     "test:integration": "docker-compose run test nyc ava test/integration; npm run docker:stop",
-    "test:docker:ci": "SERVICE_ENVIRONMENT=docker-ci nyc ava test/unit test/integration",
+    "test:docker:ci": "SERVICE_ENVIRONMENT=docker-ci nyc ava test/unit test/integration --verbose",
     "start": ". ./init-environment.sh && browser-refresh src/server.js",
     "cluster:start": ". ./init-environment.sh && browser-refresh src/cluster.js"
   },
