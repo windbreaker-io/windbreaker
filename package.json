@@ -5,16 +5,16 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint .",
-    "docker:start": "docker-compose up -d",
+    "docker:start": "docker-compose run windbreaker",
     "docker:stop": "docker-compose down",
     "pretest": "npm run lint",
     "test": "docker-compose run test",
     "posttest": "npm run docker:stop",
     "test:unit": "nyc ava test/unit",
     "test:integration": "docker-compose run test nyc ava test/integration; npm run docker:stop",
-    "test:docker:ci": "SERVICE_ENVIRONMENT=docker-ci nyc ava test/unit test/integration --verbose",
-    "start": ". ./init-environment.sh && browser-refresh src/server.js",
-    "cluster:start": ". ./init-environment.sh && browser-refresh src/cluster.js"
+    "test:docker:ci": "nyc ava test/unit test/integration --verbose",
+    "start": "browser-refresh src/server.js",
+    "cluster:start": "browser-refresh src/cluster.js"
   },
   "repository": {
     "type": "git",

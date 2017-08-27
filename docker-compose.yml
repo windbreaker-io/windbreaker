@@ -1,5 +1,16 @@
 version: '3'
 services:
+  windbreaker:
+    build: .
+    command: 'npm start'
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/windbreaker
+      - /usr/windbreaker/node_modules
+    environment:
+      SERVICE_ENVIRONMENT: 'docker-ci'
   test:
     build: .
     command: 'npm run test:docker:ci'
@@ -9,6 +20,8 @@ services:
     volumes:
       - .:/usr/windbreaker
       - /usr/windbreaker/node_modules
+    environment:
+      SERVICE_ENVIRONMENT: 'docker-ci'
   postgres:
     image: 'postgres:9.6.3-alpine'
     ports:
