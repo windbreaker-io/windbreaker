@@ -8,7 +8,7 @@ WORKDIR $HOME
 
 # install git
 RUN apk update && apk upgrade && \
-  apk add --no-cache git openssh
+  apk add --no-cache git
 
 ADD package.json $HOME
 RUN npm install --silent

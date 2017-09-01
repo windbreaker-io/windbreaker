@@ -10,7 +10,7 @@ services:
       - .:/usr/windbreaker
       - /usr/windbreaker/node_modules
     environment:
-      SERVICE_ENVIRONMENT: 'docker-ci'
+      SERVICE_ENVIRONMENT: 'docker'
   test:
     build: .
     command: 'npm run test:docker:ci'
@@ -21,7 +21,7 @@ services:
       - .:/usr/windbreaker
       - /usr/windbreaker/node_modules
     environment:
-      SERVICE_ENVIRONMENT: 'docker-ci'
+      SERVICE_ENVIRONMENT: 'docker'
   postgres:
     image: 'postgres:9.6.3-alpine'
     ports:
