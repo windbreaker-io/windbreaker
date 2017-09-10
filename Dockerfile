@@ -12,3 +12,7 @@ RUN apk update && apk upgrade && \
 
 ADD package.json $HOME
 RUN npm install --silent
+
+ADD . $HOME
+
+CMD npm start

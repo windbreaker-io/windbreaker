@@ -1,6 +1,25 @@
 services:
 - docker
-script: docker-compose run test
+
+script: docker-compose run windbreaker npm run test:docker
+
+after_success:
+  # windbreaker/windbreaker:latest is automatically built and tagged
+  # from test run
+  |
+    if [ $TRAVIS_BRANCH == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker tag windbreaker/windbreaker:latest windbreaker/windbreaker:build-$TRAVIS_BUILD_NUMBER;
+
+      # push both the build tag and update latest
+      docker push windbreaker/windbreaker:build-$TRAVIS_BUILD_NUMBER;
+      docker push windbreaker/windbreaker:latest;
+    fi
+
 notifications:
   slack:
     secure: lMz1+ged9sonDLLNWkDGUUpPs7rv0W+fDN/LZxgxHaAu+gctUs7DwOEiDC56v5Vr5T66i0jY3CeOEIME6V8ShegP69ZHM0IucWrGD7+nAsPHvZLLQgy4/3QzSze0ujtj/jU6P+AgmarK4K6FW9ReYiAkmwmsbaoE0lOUTtLCU2X7WPU7QjuxjW5sLhzHAG5l51L6XxI8+eCCLOEDBgTen/Hd2OihcxGFi7994YEU0Y4aEKye64glkgo71EAwScPsBVkCIiyC0jiWe8EKsFxdUCXn5Ij1b2p0kjS8HAUfL2w+xM+h82/pTG2uklLWf+/OD7Ol8m3UL8AXVJwicrLUd2ksXSwIljRbujuErOzuGtm8mLyVcl6lyGZgiG53KQza/oIqrmbkHZtvDbl/BSrbeJNEDSUx/A1pT2MHBVJ55TE9eaoIdS6mSK6RAZKQJxsUY70GNfyXIZbWtbDR7RnnoOxiB/8FVcEXfFcwQT0LfoFpdMTdJwcoaRGf+8rkwu+I69uPQiM8OJn1311xb+pOt4vR2wjud31w3gzcFc5+Y0eJmaxeuIdv74jYLHQzYcyheIa9g2HDUzWltOCFe9b0fZgrWgkNYJ+eIcYguEojPa2GW+CQSk3QXtpViyyanAcCGPLnNrGwwgf/vy94yYyqPPgV7464rl/sjOT1+lvRTLs=
+env:
+  global:
+  - secure: Hj3AndwXq9RyXOrNPOsZk4v5stxVeqOegM7BGKJAlRPDkF5X4MxWXX6b1ZbGrBgmz76UwNHmFkZxcYW2loE2M873mRUaIIQruR7XI9bTg5UbF5W1F+JtUpPRTLAJpA4j2pcTyWpdnlQSEBJT2Y1xq0lkXEANfRuiribnx3GZiDEqXngQZ49Z51/l9OPvvDhGAAkb1bEkL8Gavgkm0grRVAL+QsaDPzzbCOCa11PgNMGkxPPDtetAiBUiLX441pnhqY0OfQAK6nBMySm4/HQBUbWCdyl9//zE8AZT8Xmek2jNhLmFakS3ffq0XRD+VWeeHjnZu1TytDJvZhWBe5rs+WWsyne66sQ90ALVOsbGzOHcVK3Lj95EK4nXqYdgd0jtte2rQStM2BJoEQDHaDZYoRD4cWWgQAIGDIpu2iTxVMCXjn8KTD3NwDd7DEcgXeQM8bni0WQ1A7Do/hwNYBtBa7iqlE4Yhob5ijs24xw6C99ztB9DXyylZA9ltXAaJxmBeXFcdPf8xL2KZf+rchDYZUHZVCY6pSNoaxnum3CabWdNfWd21aCER3hwGA3HF6WlxQTgyfhtXoF+MsuKYDJ50LBnhIqh6YcNWKPK1vjgWsS9yS/omYcas9TOGLUVwsumLwAc4gbDZ1/nh8Egyrz+2tVAvtZ/bw2gPfAbxhopgAM=
+  - secure: bjgEBxpEp4sY896h9hruzszBlpPs78PjDA2/Mh9pzHAOGAWHsHD8R/uzY7rAUL9yNK8i5rTgNV/KTMLL7PQwczKCOMGPDBY4OCJuxwarTy6JEaRquyLh+ZacGtwu76J8KFY+h1qkqsTJtRmd8avNfuLku9lUdhDv7l6LHzlYbT7rHRdSyj3QIopb9snvJTckxK6kitibsadWYx2srKKtoiLA2XX6xBLZ/KeYcRCEKHdHOyTOPlwwlSJcSRHD6F6di9Ufa5XTOoM4mt94tyBJXuMc6ccgRUIXiggEiterAmJD/B3RJwNobQREq1JcLZdyP5zjMY13udRINwbV06I8amnqDSHSNZvvXQylY3eO2XMV5/i5j6Furc3qHrO9ENd6kw0QDmxHiVmzVh7AnCb6wKkcrOdi4rOrw7Y5/7Ag7eT6L2zj3KEBtHjcQgWK905c/6yoCD6olGI5orsG3dzIEEvALBPF4C34krBY6rshJYiUJfCn7Q0asvqj63Z1mYGON0EgQxJ2H+b06QJZOE8xeEFthb/pGFUOuKamSk5VglIpk31sO+IVs10WUW6bHE7tM6KpqC1VCilXPaTVohqndzlwFazhwPPQP/9lvPQwJEwOlgzR3cSenmV2OCh+gxxYhjetAv6+obXfC85tO+X/Gu7FMN6GweK8zyopteh8Ucw=
