@@ -2,7 +2,7 @@ node_modules/
 dist/
 .nyc_output/
 coverage/
-
+*.marko.js
 
 ### vim artifacts - https://github.com/github/gitignore/blob/master/Global/Vim.gitignore ###
 
