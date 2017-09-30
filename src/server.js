@@ -2,6 +2,8 @@
  * Server start point
  */
 require('require-self-ref')
+require('marko/node-require')
+
 const config = require('~/src/config')
 const startupTasks = require('~/src/startup-tasks')
 
