@@ -1,4 +1,3 @@
-
 const templateTypeToTemplateMap = {
   pr: require('~/src/util/templates/pr-template')
 }
@@ -12,8 +11,8 @@ function renderToStringAsync (template, data) {
 }
 
 exports.build = async function (typeName, data) {
-  let template
-  if (!(template = templateTypeToTemplateMap[typeName])) {
+  let template = templateTypeToTemplateMap[typeName]
+  if (!template) {
     throw new Error(`Invalid template type: "${typeName}"`)
   }
 
