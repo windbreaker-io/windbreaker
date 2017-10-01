@@ -5,16 +5,18 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint .",
-    "docker:start": "docker-compose run windbreaker",
+    "migrate:local": "node src/dao/createDatabase && knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
+    "docker:start": "docker-compose up windbreaker",
     "docker:stop": "docker-compose down",
+    "docker:rebuild:test": "docker-compose build --no-cache test",
     "pretest": "npm run lint",
-    "test": "docker-compose run windbreaker npm run test:docker",
+    "test": "docker-compose run windbreaker npm run test:docker; npm run posttest",
     "posttest": "npm run docker:stop",
     "test:unit": "nyc ava test/unit",
-    "test:integration": "docker-compose run windbreaker nyc ava test/integration; npm run docker:stop",
-    "test:docker": "nyc ava test/unit test/integration --verbose",
-    "start": "browser-refresh src/server.js",
-    "cluster:start": "browser-refresh src/cluster.js"
+    "test:integration": "docker-compose run windbreaker nyc ava test/integration; npm run posttest",
+    "test:docker": "npm run migrate:local && nyc ava test/unit test/integration --verbose",
+    "start": "npm run migrate:local && browser-refresh src/server.js",
+    "cluster:start": "npm run migrate:local && browser-refresh src/cluster.js"
   },
   "repository": {
     "type": "git",
@@ -51,32 +53,41 @@
   "ava": {
     "require": [
       "require-self-ref"
-    ]
+    ],
+    "babel": {
+      "plugins": [
+        "transform-object-rest-spread"
+      ]
+    },
+    "failFast": true
   },
   "devDependencies": {
     "ava": "^0.20.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "branch-name-commit-modifier": "^2.0.1",
-    "eslint": "^4.5.0",
+    "eslint": "^4.8.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "git-hooks": "^1.1.8",
     "nyc": "^11.1.0",
     "proxyquire": "^1.8.0",
-    "sinon": "^2.4.1"
+    "sinon": "^2.4.1",
+    "uuid": "^3.1.0"
   },
   "dependencies": {
     "amqplib": "^0.5.1",
     "bluebird": "^3.5.0",
     "browser-refresh": "^1.7.2",
-    "fashion-model-defaults": "^1.0.2",
+    "bunyan": "^1.8.12",
+    "fashion-model-defaults": "^1.1.0",
+    "github": "^10.1.0",
     "glob": "^7.1.2",
     "marko": "^4.4.28",
     "require-self-ref": "^2.0.1",
     "task-list": "^1.0.6",
-    "uuid": "^3.1.0",
     "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
   }
 }

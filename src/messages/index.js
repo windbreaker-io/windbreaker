@@ -1,5 +1,6 @@
 const Event = require('windbreaker-service-util/models/events/Event')
 const _getEventHandlers = require('~/src/util/getEventHandlers')
+const logger = require('~/src/logging').logger(module)
 
 const eventHandlers = _getEventHandlers()
 
@@ -12,6 +13,7 @@ exports.handleMessage = async function handleMessage (message) {
     const handleEvent = eventHandlers[typeName]
 
     if (handleEvent) {
+      logger.info(`handling event with typeName "${typeName}"`)
       await handleEvent(message)
     } else {
       throw new Error(`No handler for the type "${typeName}" exists`)

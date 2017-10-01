@@ -1,2 +1,15 @@
 # Address for rabbitmq
 amqUrl: "${AMQ_URL}"
+
+githubAppId: "${GITHUB_APP_ID}"
+
+knex:
+  client: 'pg'
+  connection:
+    host: 'postgres'
+    user: 'postgres'
+    password: 'postgres'
+    database: 'windbreaker_core'
+  debug: true
+  migrations: 
+    tableName: 'migrations'
