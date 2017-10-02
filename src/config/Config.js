@@ -41,10 +41,6 @@ module.exports = BaseConfig.extend({
 
     knex: KnexConfig,
 
-    githubAppId: {
-      description: 'Github windbreaker application ID (does\'t change)'
-    },
-
     githubPrivateKeyPath: {
       description: 'Absolute path to github private key file',
       default: '.secrets/windbreaker-github-private-key.pem'

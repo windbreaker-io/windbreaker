@@ -12,7 +12,7 @@ exports.up = function (knex, Promise) {
     .createTableIfNotExists(INSTALLATION_TABLE_NAME, (table) => {
       // TODO: Add more as more properties are added
       // to the Installation model
-      table.integer('id').primary()
+      table.integer('id').unsigned().primary()
       table.integer('app_id').notNullable()
       table.timestamps(true, true) // adds created_at/updated_at columns and default to now
     })

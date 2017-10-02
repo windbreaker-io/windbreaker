@@ -1,8 +1,6 @@
 # Address for rabbitmq
 amqUrl: "${AMQ_URL}"
 
-githubAppId: "${GITHUB_APP_ID}"
-
 knex:
   client: 'pg'
   connection:
