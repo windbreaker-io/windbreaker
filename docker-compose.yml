@@ -10,6 +10,8 @@ services:
     volumes:
       - .:/usr/windbreaker
       - /usr/windbreaker/node_modules
+      # Uncomment to link (or modify to fit your directory structure)
+      # - ../windbreaker-service-util:/usr/windbreaker/node_modules/windbreaker-service-util
     environment:
       SERVICE_ENVIRONMENT: 'docker'
   postgres:

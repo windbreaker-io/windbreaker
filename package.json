@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint .",
-    "migrate:local": "node src/dao/createDatabase && knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
+    "migrate:local": "node src/dao/_migration-helpers/createDatabase && knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
     "docker:start": "docker-compose up windbreaker",
     "docker:stop": "docker-compose down",
     "docker:rebuild:test": "docker-compose build --no-cache test",
@@ -58,8 +58,7 @@
       "plugins": [
         "transform-object-rest-spread"
       ]
-    },
-    "failFast": true
+    }
   },
   "devDependencies": {
     "ava": "^0.20.0",
@@ -74,16 +73,13 @@
     "git-hooks": "^1.1.8",
     "nyc": "^11.1.0",
     "proxyquire": "^1.8.0",
-    "sinon": "^2.4.1",
-    "uuid": "^3.1.0"
+    "sinon": "^2.4.1"
   },
   "dependencies": {
     "amqplib": "^0.5.1",
     "bluebird": "^3.5.0",
     "browser-refresh": "^1.7.2",
-    "bunyan": "^1.8.12",
     "fashion-model-defaults": "^1.1.0",
-    "github": "^10.1.0",
     "glob": "^7.1.2",
     "marko": "^4.4.28",
     "require-self-ref": "^2.0.1",

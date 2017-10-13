@@ -1,5 +1,3 @@
-require('require-self-ref')
-
 const logger = require('~/src/logging').logger(module)
 const installationDao = require('~/src/dao/github/installation')
 const repositoryDao = require('~/src/dao/github/repository')

@@ -2,6 +2,7 @@ require('require-self-ref')
 const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
 const Knex = require('knex')
+const createDatabase = require('windbreaker-service-util/dao/_migration-helpers/createDatabase')
 
 config.load()
 
@@ -15,12 +16,12 @@ delete knexConfig.connection.database
 
 const knex = Knex(knexConfig)
 
-logger.info(`Attempting to create database '${dbName}'`)
-module.exports = knex
-  .raw(`CREATE DATABASE ${dbName}`)
-  .catch((err) => {
-    if (!err.message.includes('already exists')) {
-      throw err
-    }
-  })
-  .then(() => knex.destroy())
+;(async function () {
+  logger.info(`Attempting to create database '${dbName}'`)
+  try {
+    await createDatabase(knex, dbName)
+  } catch (err) {
+    logger.error(`Error while creating database '${dbName}'`, err)
+    process.exit(1)
+  }
+})()
