@@ -1,4 +1,4 @@
-FROM node:8.1.2-alpine
+FROM node:8.6.0-alpine
 
 ENV HOME=/usr/windbreaker
 

@@ -1,4 +1,3 @@
-require('require-self-ref')
 const test = require('ava')
 
 const config = require('~/src/config')

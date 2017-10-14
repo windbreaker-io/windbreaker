@@ -1,8 +1,15 @@
 node_modules/
 dist/
 .nyc_output/
+.node-spawn-wrap*
 coverage/
 *.marko.js
+
+# windbreaker secrets - github keys, etc
+.secrets/
+
+# shell history from docker exec
+.ash_history
 
 ### vim artifacts - https://github.com/github/gitignore/blob/master/Global/Vim.gitignore ###
 
@@ -21,5 +28,7 @@ Session.vim
 # Auto-generated tag files
 tags
 
+npm-debug.log
 .npm/
 .config/
+.v8flags*

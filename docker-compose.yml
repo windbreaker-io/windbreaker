@@ -10,10 +10,16 @@ services:
     volumes:
       - .:/usr/windbreaker
       - /usr/windbreaker/node_modules
+      # Uncomment to link (or modify to fit your directory structure)
+      # - ../windbreaker-service-util:/usr/windbreaker/node_modules/windbreaker-service-util
     environment:
       SERVICE_ENVIRONMENT: 'docker'
   postgres:
     image: 'postgres:9.6.3-alpine'
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'windbreaker_core'
     ports:
       - 5432
   rabbitmq:
