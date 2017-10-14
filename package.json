@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint .",
-    "migrate:local": "node src/dao/_migration-helpers/createDatabase && knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
+    "migrate:local": "knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
     "docker:start": "docker-compose up windbreaker",
     "docker:stop": "docker-compose down",
     "docker:rebuild:test": "docker-compose build --no-cache test",
