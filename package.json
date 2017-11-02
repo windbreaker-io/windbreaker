@@ -13,8 +13,9 @@
     "test": "docker-compose run windbreaker npm run test:docker; npm run posttest",
     "posttest": "npm run docker:stop",
     "test:unit": "nyc ava test/unit",
-    "test:integration": "docker-compose run windbreaker nyc ava test/integration; npm run posttest",
-    "test:docker": "npm run migrate:local && nyc ava test/unit test/integration --verbose",
+    "test:integration": "docker-compose run windbreaker npm run test:docker:integration",
+    "test:docker": "npm run migrate:local && nyc ava test/unit test/integration --verbose --timeout=30s",
+    "test:docker:integration": "npm run migrate:local && nyc ava test/integration --verbose --timeout=30s",
     "start": "npm run migrate:local && browser-refresh src/server.js",
     "cluster:start": "npm run migrate:local && browser-refresh src/cluster.js"
   },
