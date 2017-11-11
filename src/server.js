@@ -4,16 +4,13 @@
 require('require-self-ref')
 require('marko/node-require')
 
-const config = require('~/src/config')
-const startupTasks = require('~/src/startup-tasks')
+exports.start = async function (configOverrides) {
+  const config = require('~/src/config')
+  const startupTasks = require('~/src/startup-tasks')
 
-let logger
-
-// handle startup tasks here
-;(async function () {
   try {
-    await config.load()
-    logger = require('~/src/logging').logger(module)
+    config.load(configOverrides)
+    require('~/src/logging').logger(module)
 
     await startupTasks.startAll()
 
@@ -22,14 +19,15 @@ let logger
       process.send('online')
     }
   } catch (err) {
-    logger.error('Error occurred while performing startup tasks', err)
+    console.error('Error occurred while performing startup tasks', err)
+    process.exit(1)
   }
-})()
 
-process.on('uncaughtException', (err) => {
-  logger.error('UncaughtException', err)
-})
+  process.on('uncaughtException', (err) => {
+    console.error('UncaughtException', err)
+  })
 
-process.on('unhandledException', (err) => {
-  logger.error('UnhandledException', err)
-})
+  process.on('unhandledException', (err) => {
+    console.error('UnhandledException', err)
+  })
+}
