@@ -92,10 +92,8 @@ function buildTest ({ testFile, context, dir, file, beforeEach, afterEach, build
 }
 
 exports.register = function ({ test, dir, beforeEach, afterEach, buildEndpoint }) {
-  const context = {}
-  integrationTest.register({
+  const { httpServerPort } = integrationTest.register({
     test,
-    context,
     startupTasks,
     server
   })
@@ -113,7 +111,9 @@ exports.register = function ({ test, dir, beforeEach, afterEach, buildEndpoint }
 
     test(testDescription, buildTest({
       testFile,
-      context,
+      context: {
+        httpServerPort
+      },
       dir,
       file,
       beforeEach,

@@ -14,13 +14,17 @@ exports.register = function ({ test, context, startupTasks, server }) {
     throw err
   }
 
-  test.before(async (t) => {
+  test.before(async () => {
     console.log('Attempting to start test server...')
     await server.start([{ httpServerPort }])
     console.log('Successfully started test server')
   })
 
   test.after(async () => {
+    console.log('Attempting to stop the startup tasks...')
     await startupTasks.stopAll()
+    console.log('Successfully stopped the startup tasks.')
   })
+
+  return { httpServerPort }
 }

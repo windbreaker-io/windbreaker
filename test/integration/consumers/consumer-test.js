@@ -65,7 +65,7 @@ test.afterEach('teardown test environment', async (t) => {
   sandbox.restore()
 })
 
-test.serial('should be able to pass messages to the correct message handlers', async (t) => {
+test.skip('should be able to pass messages to the correct message handlers', async (t) => {
   const {
     githubPushSpy,
     eventConsumer,
