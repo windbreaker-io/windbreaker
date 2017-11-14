@@ -4,7 +4,7 @@ const logger = require('~/src/logging').logger(module)
 let server
 
 const routes = [
-  '~/src/http-server/v1/repository/repository-enabled'
+  '~/src/http-server/v1/repository/enabled'
 ].map((routePath) => require(routePath))
 
 exports.create = function () {
