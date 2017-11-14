@@ -36,7 +36,6 @@ test.beforeEach('initialize consumers and producers', async (t) => {
   const { eventConsumer, workConsumer } = await consumers.initialize()
 
   const eventProducer = await createProducer({
-    logger: console,
     amqUrl: config.getAmqUrl(),
     producerOptions: {
       queueName: config.getEventsQueueName()
@@ -66,7 +65,7 @@ test.afterEach('teardown test environment', async (t) => {
   sandbox.restore()
 })
 
-test('should be able to pass messages to the correct message handlers', async (t) => {
+test.serial('should be able to pass messages to the correct message handlers', async (t) => {
   const {
     githubPushSpy,
     eventConsumer,
@@ -84,8 +83,8 @@ test('should be able to pass messages to the correct message handlers', async (t
   })
 
   const messagePromise = waitForEvent(simpleConsumer, 'message')
-  await eventProducer.sendMessage(event)
 
+  await eventProducer.sendMessage(event)
   await messagePromise
 
   // validate that github push stub was called
@@ -94,7 +93,7 @@ test('should be able to pass messages to the correct message handlers', async (t
   t.pass()
 })
 
-test('should call for each consumer to stop upon closing', async (t) => {
+test.serial('should call for each consumer to stop upon closing', async (t) => {
   t.plan(0)
 
   const {
