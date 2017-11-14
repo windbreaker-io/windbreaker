@@ -1,13 +1,13 @@
 const path = require('path')
 const test = require('ava')
 const uuid = require('uuid')
+const server = require('~/src/server')
+const startupTasks = require('~/src/startup-tasks')
 const installationDao = require('~/src/dao/github/installation')
 const repositoryDao = require('~/src/dao/github/repository')
-const addToContext = require('~/test/util/addToContext')
-
-function randomInRange (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
+const addToContext = require('windbreaker-service-util/testing/addToContext')
+const payloadTest = require('windbreaker-service-util/testing/payload-test')
+const randomId = require('~/test/util/randomId')
 
 async function afterEach (t) {
   const { installationId, repositoryId, testFile } = t.context
@@ -40,9 +40,11 @@ async function afterEach (t) {
 
 const payloadTestDir = path.join(__dirname, '../../autotests/http/github-repo-enabled')
 
-require('~/test/util/payload-test').register({
+payloadTest.register({
   test,
   dir: payloadTestDir,
+  server,
+  startupTasks,
   buildEndpoint (t) {
     const { httpServerPort, repoFullName } = t.context
     return `:${httpServerPort}/v1/repository/github/${repoFullName}/enabled`
@@ -52,10 +54,10 @@ require('~/test/util/payload-test').register({
   * these payload tests
   */
   async beforeEach (t) {
-    const installationId = randomInRange(1000, 100000)
-    const appId = randomInRange(1000, 1000000)
+    const installationId = randomId()
+    const appId = randomId()
 
-    const repositoryId = randomInRange(1000, 1000000)
+    const repositoryId = randomId()
     const name = 'test-github-repo'
     const repoFullName = uuid.v4() + '/' + name
 
