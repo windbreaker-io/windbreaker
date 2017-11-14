@@ -16,7 +16,7 @@
     "test:integration": "docker-compose run windbreaker npm run test:docker:integration",
     "test:docker": "npm run migrate:local && nyc ava test/unit test/integration --verbose --timeout=30s",
     "test:docker:integration": "npm run migrate:local && nyc ava test/integration --verbose --timeout=30s",
-    "start": "npm run migrate:local && browser-refresh src/server.js",
+    "start": "npm run migrate:local && browser-refresh src/run-server.js",
     "cluster:start": "npm run migrate:local && browser-refresh src/cluster.js"
   },
   "repository": {
@@ -71,10 +71,13 @@
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
+    "get-port-sync": "^1.0.0",
     "git-hooks": "^1.1.8",
+    "knex": "^0.14.0",
     "nyc": "^11.2.1",
     "proxyquire": "^1.8.0",
-    "sinon": "^2.4.1"
+    "sinon": "^2.4.1",
+    "superagent": "^3.8.1"
   },
   "dependencies": {
     "amqplib": "^0.5.1",

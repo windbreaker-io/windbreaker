@@ -24,6 +24,22 @@ exports.findById = async function (id) {
   return dao.findById(id)
 }
 
+exports.deleteById = async function (id) {
+  return dao.deleteById(id)
+}
+
+/**
+* Search the database for a repo
+*
+* @param repoFullName {String} Full name of the repo e.g. "torvalds/linux"
+*/
+exports.findByRepoFullName = async function (repoFullName) {
+  return dao
+    .select()
+    .where('full_name', repoFullName)
+    .limit(1)
+}
+
 exports.close = async function () {
   return dao.destroy()
 }

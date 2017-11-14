@@ -22,6 +22,10 @@ exports.findById = async function (id) {
   return dao.findById(id)
 }
 
+exports.deleteById = async function (id) {
+  return dao.deleteById(id)
+}
+
 exports.close = async function () {
   return dao.destroy()
 }

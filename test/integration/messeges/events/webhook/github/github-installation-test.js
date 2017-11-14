@@ -1,32 +1,36 @@
 const test = require('ava')
 
+const { randomNumber } = require('windbreaker-service-util/helpers/randomHelper')
 const githubInstallationHandler = require('~/src/messages/events/webhook/github/github-installation')
 const InstallationEvent = require('windbreaker-service-util/models/events/webhook/github/Installation')
-const testSetup = require('~/test/integration/helpers/setup')
 const installationDao = require('~/src/dao/github/installation')
 const repositoryDao = require('~/src/dao/github/repository')
+const integrationTest = require('windbreaker-service-util/testing/integration-test')
+const startupTasks = require('~/src/startup-tasks')
+const server = require('~/src/server')
 
-testSetup.registerStartupTasks(test)
+integrationTest.register({ test, startupTasks, server })
 
 function pick ({id, name, full_name}) {
   return {id, name, full_name}
 }
-function randomNum () {
-  return Math.floor(Math.random() * 100000000)
+
+function randomId () {
+  return randomNumber(1, 100000000)
 }
 
 test.beforeEach(function (t) {
   const installation = {
-    id: randomNum(),
-    app_id: randomNum()
+    id: randomId(),
+    app_id: randomId()
   }
 
   const repositories = [{
-    id: randomNum(),
+    id: randomId(),
     name: 'three-mocha-puppeteers',
     full_name: 'charlieDugong/three-mocha-puppeteers'
   }, {
-    id: randomNum(),
+    id: randomId(),
     name: 'three-mocha-puppeteering',
     full_name: 'charlieDugong/three-mocha-puppeteering'
   }]
