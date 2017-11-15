@@ -3,7 +3,5 @@ module.exports = async function (message) {
   /*
   const dependencyUpdate = message.getData()
   const type = dependencyUpdate.getType()
-
-  // handle the rest here
   */
 }
