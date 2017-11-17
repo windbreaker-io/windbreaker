@@ -1,7 +1,5 @@
-module.exports = async function (message) {
-  // TODO: handle dependency updates here
-  /*
-  const dependencyUpdate = message.getData()
-  const type = dependencyUpdate.getType()
-  */
+const updateService = require('~/src/services/update')
+
+module.exports = function handleUpdateEvent (updateEvent) {
+  return updateService.handleUpdate(updateEvent)
 }
