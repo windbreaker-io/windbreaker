@@ -1,0 +1,19 @@
+{
+  "name": "package.json",
+  "path": "package.json",
+  "sha": "b1cea45aec59f873ef222bb9892882d0e1f8d194",
+  "size": 495,
+  "url": "https://api.github.com/repos/Druotic/greenkeeper-dep-test/contents/package.json?ref=master",
+  "html_url": "https://github.com/Druotic/greenkeeper-dep-test/blob/master/package.json",
+  "git_url": "https://api.github.com/repos/Druotic/greenkeeper-dep-test/git/blobs/b1cea45aec59f873ef222bb9892882d0e1f8d194",
+  "download_url": "https://raw.githubusercontent.com/Druotic/greenkeeper-dep-test/master/package.json",
+  "type": "file",
+  "content": "ewogICJuYW1lIjogImdyZWVua2VlcGVyLWRlcC10ZXN0IiwKICAidmVyc2lv\nbiI6ICIzLjAuMSIsCiAgImRlc2NyaXB0aW9uIjogIiIsCiAgIm1haW4iOiAi\naW5kZXguanMiLAogICJzY3JpcHRzIjogewogICAgInRlc3QiOiAibW9jaGEi\nCiAgfSwKICAicmVwb3NpdG9yeSI6IHsKICAgICJ0eXBlIjogImdpdCIsCiAg\nICAidXJsIjogImdpdCtodHRwczovL2dpdGh1Yi5jb20vRHJ1b3RpYy9ncmVl\nbmtlZXBlci1kZXAtdGVzdC5naXQiCiAgfSwKICAiYXV0aG9yIjogIiIsCiAg\nImxpY2Vuc2UiOiAiSVNDIiwKICAiYnVncyI6IHsKICAgICJ1cmwiOiAiaHR0\ncHM6Ly9naXRodWIuY29tL0RydW90aWMvZ3JlZW5rZWVwZXItZGVwLXRlc3Qv\naXNzdWVzIgogIH0sCiAgImhvbWVwYWdlIjogImh0dHBzOi8vZ2l0aHViLmNv\nbS9EcnVvdGljL2dyZWVua2VlcGVyLWRlcC10ZXN0I3JlYWRtZSIsCiAgImRl\ndkRlcGVuZGVuY2llcyI6IHsKICAgICJjaGFpIjogIl40LjAuMiIKICB9Cn0K\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/Druotic/greenkeeper-dep-test/contents/package.json?ref=master",
+    "git": "https://api.github.com/repos/Druotic/greenkeeper-dep-test/git/blobs/b1cea45aec59f873ef222bb9892882d0e1f8d194",
+    "html": "https://github.com/Druotic/greenkeeper-dep-test/blob/master/package.json"
+  }
+}
+
