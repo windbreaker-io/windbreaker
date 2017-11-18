@@ -16,28 +16,38 @@ let dao
  * the query to be malformed
  */
 function _jsonKeyExistsIn (knex, key, field) {
-  return knex.raw(`${field}::jsonb ->> ? is not null`, [ key ])
+  return knex.raw(`${field} ->> ? is not null`, [ key ])
 }
 
+/**
+ * Helper function stringifying dependencies
+ * (needed by postgres)
+ *
+ * @param { Object } data - the data to be stored
+ */
 function _formatDependencies (data) {
   return {
-    dependencies: JSON.stringify(data.dependencies || {}),
-    dev_dependencies: JSON.stringify(data.dev_dependencies || {}),
-    optional_dependencies: JSON.stringify(data.optional_dependencies || {}),
-    peer_dependencies: JSON.stringify(data.peer_dependencies || {})
+    dependencies: JSON.stringify(data.dependencies),
+    dev_dependencies: JSON.stringify(data.dev_dependencies),
+    optional_dependencies: JSON.stringify(data.optional_dependencies),
+    peer_dependencies: JSON.stringify(data.peer_dependencies)
   }
 }
 
-exports.createDao = function () {
+/**
+ * Instantiates the dao
+ */
+function createDao () {
   dao = new BaseDao({
     modelType: NpmDependencies
   })
 }
 
 /**
-* Upserts a new Npm dependencies record in the database, do nothing on conflict
-*/
-exports.insert = async function (data) {
+ * Inserts a new npm dependencies record into the database
+ * @async
+ */
+function insert (data) {
   data = cleanModel(data)
 
   return dao.insert({
@@ -48,9 +58,10 @@ exports.insert = async function (data) {
 }
 
 /**
-* Upserts a new Npm dependencies record in the database, do nothing on conflict
-*/
-exports.updateById = async function (id, data) {
+ * Updates npm package.json dependencies by id
+ * @async
+ */
+function updateById (id, data) {
   const knex = dao.getKnex()
   const tableName = dao.getTableName()
 
@@ -61,7 +72,11 @@ exports.updateById = async function (id, data) {
     .update(_formatDependencies(data))
 }
 
-exports.findByDependency = async function (dependencyName) {
+/**
+ * Searches for package.json via the dependency
+ * @async
+ */
+async function findByDependency (dependencyName) {
   const knex = dao.getKnex()
   const keyExistsIn = _jsonKeyExistsIn.bind(null, knex, dependencyName)
 
@@ -75,6 +90,18 @@ exports.findByDependency = async function (dependencyName) {
   return results.map((result) => dao.wrap(result))
 }
 
-exports.close = async function () {
+/**
+ * Closes out the dao
+ * @async
+ */
+function close () {
   return dao.destroy()
+}
+
+module.exports = {
+  createDao,
+  insert,
+  updateById,
+  findByDependency,
+  close
 }

@@ -4,7 +4,7 @@ const NpmProject = require('~/src/models/dependencies/Npm')
 const REPOSITORY_TABLE_NAME = NpmProject.typeName
 
 exports.up = function ({ schema }) {
-  logger.info('Attempting to run "up" on "create-repository-table"')
+  logger.info('Attempting to run "up" on "create-npm_dependencies-table"')
   logger.info('Attempting to create repository table with table name: ', REPOSITORY_TABLE_NAME)
 
   return schema

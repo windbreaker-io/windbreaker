@@ -1,5 +1,6 @@
 /**
-* Model for Installations stored in the databases
+* Model for npm dependencies stored in the databases
+*
 * __WHEN MODIFIYING THIS FILE__: Update `~/src/dao/migrations` migrations to
 * reflect the schema changes.
 */
