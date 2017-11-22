@@ -5,7 +5,8 @@ function _createTasks () {
   return [
     'task-start-consumers',
     'task-connect-to-db',
-    'task-start-http-server'
+    'task-start-http-server',
+    'task-load-secrets'
   ].map((task) => {
     return require(`./${task}`)
   })
